@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Feliz Mesversário ❤️</title>
+
+<!-- ============================================================
+  COMO PERSONALIZAR ESTE SITE — leia antes de editar
+  1) FOTOS: coloque seus arquivos em /assets/fotos/ e troque os
+     caminhos marcados com "TROQUE AQUI" na seção Galeria.
+  2) GIFS DO SNOOPY: coloque seus arquivos (que você mesma forneceu
+     ou que tenham licença de uso) em /assets/gifs/ e aponte os
+     elementos <img class="snoopy-gif"> para eles.
+  3) MÚSICA: coloque o arquivo .mp3 em /assets/musica/ e ajuste o
+     <source> dentro de <audio id="bg-music">.
+  4) DATAS E FRASES: procure os comentários "TROQUE AQUI" espalhados
+     pelo arquivo — cada um indica exatamente o que editar.
+============================================================= -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ======================= CURSOR CUSTOMIZADO ======================= -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- ======================= TELA DE ENTRADA ======================= -->
+<div class="loader" id="loader">
+  <div class="loader-heart">❤</div>
+  <p class="loader-text">preparando algo especial…</p>
+</div>
+
+<!-- ======================= FUNDO VIVO (canvas) ======================= -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- ======================= PLAYER DE MÚSICA ======================= -->
+<div class="music-player" id="musicPlayer">
+  <button class="music-btn" id="musicBtn" aria-label="Tocar nossa música">
+    <span class="music-icon">♪</span>
+  </button>
+  <div class="music-notes" id="musicNotes"></div>
+  <!-- TROQUE AQUI: coloque sua música em /assets/musica/nossa-musica.mp3 -->
+  <audio id="bg-music" loop preload="none">
+    <source src="assets/musica/lutarPeloQueEMeu.mpeg" type="audio/mpeg">
+  </audio>
+</div>
+
+<!-- Woodstock voando ocasionalmente pela tela -->
+<img src="assets/gifs/woodstock.png" alt="" class="woodstock-fly" id="woodstockFly">
+
+<!-- TROQUE AQUI: Snoopy correndo de vez em quando pela parte de baixo da tela -->
+<img src="assets/gifs/snoopy_correndo.png" alt="" class="snoopy-run" id="snoopyRun">
+
+<main id="main">
+
+  <!-- ======================= HERO ======================= -->
+  <section class="hero" id="hero">
+    <div class="hero-glow"></div>
+    <!-- TROQUE AQUI: Snoopy sentado olhando as estrelas -->
+    <img src="assets/gifs/snoopy-flor.png" alt="Snoopy observando as estrelas" class="hero-snoopy">
+
+    <div class="hero-content">
+      <p class="eyebrow">Sitezin pra vc!</p>
+      <h1 class="hero-title" id="heroTitle"><!-- TROQUE AQUI o título --></h1>
+      <p class="hero-subtitle" id="heroSubtitle"></p>
+    </div>
+    <div class="scroll-hint">
+      <span></span>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">&times;</button>
+    <img src="" alt="" id="lightboxImg">
+  </div>
+
+  <!-- ======================= CARTINHAS ======================= -->
+  <section class="letters-section" id="letters">
+    <p class="section-eyebrow">para você ler</p>
+    <h2 class="section-title">Cartinhas de amor</h2>
+    <!-- TROQUE AQUI o texto dentro de cada envelope -->
+    <img src="assets/gifs/snoopy_carta.png" alt="Snoopy escrevendo uma carta" class="letters-snoopy">
+
+    <div class="letters-grid">
+      <div class="envelope" data-letter="1">
+        <div class="envelope-front"><span class="envelope-heart">❤</span></div>
+        <div class="envelope-back"></div>
+      </div>
+      <div class="envelope" data-letter="2">
+        <div class="envelope-front"><span class="envelope-heart">❤</span></div>
+        <div class="envelope-back"></div>
+      </div>
+      <div class="envelope" data-letter="3">
+        <div class="envelope-front"><span class="envelope-heart">❤</span></div>
+        <div class="envelope-back"></div>
+      </div>
+      <div class="envelope" data-letter="4">
+        <div class="envelope-front"><span class="envelope-heart">❤</span></div>
+        <div class="envelope-back"></div>
+      </div>
+    </div>
+
+    <div class="letter-modal" id="letterModal">
+      <div class="letter-paper">
+        <button class="letter-close" id="letterClose">&times;</button>
+        <p class="editable" contenteditable="true" id="letterText">Escrever aqui…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= CÉU ESTRELADO ======================= -->
+  <section class="sky-section" id="sky">
+    <p class="section-eyebrow">faça um pedido</p>
+    <h2 class="section-title">Toque nas estrelas</h2>
+    <p class="sky-hint" id="skyHint">Uma a uma, elas vão formar um coração…</p>
+
+    <div class="sky-wrap">
+      <canvas id="skyCanvas"></canvas>
+      <!-- TROQUE AQUI: Snoopy deitado na casinha olhando as estrelas -->
+      <img src="assets/gifs/snoopy_casinha.png" alt="Snoopy deitado na casinha" class="sky-snoopy">
+    </div>
+
+    <p class="sky-message" id="skyMessage"></p>
+  </section>
+
+  <br>
+  <br>
+  <br>
+
+  <!-- ======================= FINAL ======================= -->
+  <section class="final-section" id="final">
+    <div class="final-moon"></div>
+    <div class="final-aurora"></div>
+
+    <div class="final-content">
+      <img src="assets/gifs/snoopyolhandoceu.png" alt="Snoopy e Woodstock olhando o céu" class="final-snoopy">
+      <p class="final-line" id="finalLine1">Obrigado por tornar minha vida muito mais feliz.</p>
+      <button class="btn-primary magnetic" id="loveBtn">
+        <span>Eu te amo</span>
+      </button>
+      <p class="final-message" id="finalMessage">
+        Essa é apenas mais uma página da nossa história.<br>
+        Que venham infinitas outras ao seu lado. ❤️
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<!-- easter egg: pequeno Snoopy escondido -->
+<img src="assets/gifs/snoopyescondido.png" alt="" class="easter-egg" id="easterEgg">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
