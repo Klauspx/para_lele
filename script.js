@@ -17,6 +17,18 @@ const CONFIG = {
     'Meu amor por você cresce todos os dias.'
   ],
 
+  // Páginas da revista de fotos — TROQUE AQUI
+  // Pode ter quantas quiser. Deixe src: '' para um espaço vazio
+  // (aparece um quadradinho pontilhado) até você ter a foto pra colocar.
+  revista: [
+    { src: 'assets/fotos/foto1.jpg', caption: 'Escreva uma legenda aqui…' }, // TROQUE AQUI
+    { src: 'assets/fotos/foto2.jpg', caption: 'Escreva uma legenda aqui…' }, // TROQUE AQUI
+    { src: '', caption: '' },
+    { src: '', caption: '' },
+    { src: '', caption: '' },
+    { src: '', caption: '' }
+  ],
+
   // Texto de cada cartinha — TROQUE AQUI
   letters: [
     'Quando estou ao seu lado, todos os meus problemas desaparecem...',
@@ -529,6 +541,111 @@ gsap.utils.toArray('.envelope').forEach((el,i) => {
   });
   if (closeBtn) closeBtn.addEventListener('click', () => modal.classList.remove('open'));
   modal.addEventListener('click', e => { if(e.target === modal) modal.classList.remove('open'); });
+})();
+
+/* =========================================================
+   REVISTA DE FOTOS — livro com efeito de virar página
+========================================================= */
+(function photoBook(){
+  const mount = $('#bookPages');
+  if (!mount) return;
+  const prevBtn = $('#bookPrev');
+  const nextBtn = $('#bookNext');
+  const dotsWrap = $('#bookDots');
+  const pages = CONFIG.revista || [];
+  if (!pages.length) return;
+
+  let current = 0;
+
+  // monta as páginas a partir do CONFIG.revista
+  mount.innerHTML = '';
+  pages.forEach(p => {
+    const pageEl = document.createElement('div');
+    pageEl.className = 'book-page';
+    pageEl.innerHTML = `
+      <div class="page-face front">
+        ${p.src
+          ? `<img class="page-photo" src="${p.src}" alt="${p.caption || ''}">`
+          : `<div class="page-placeholder">
+               <span class="icon">📷</span>
+               <span>Coloque uma foto aqui<br>(/assets/fotos/)</span>
+             </div>`}
+        ${p.caption ? `<p class="page-caption">${p.caption}</p>` : ''}
+      </div>
+      <div class="page-face back"></div>
+    `;
+    mount.appendChild(pageEl);
+  });
+
+  const pageEls = $$('.book-page', mount);
+
+  function render(){
+    pageEls.forEach((el, i) => {
+      if (i < current){
+        el.style.transform = 'rotateY(-180deg)';
+        el.style.zIndex = i;
+      } else {
+        el.style.transform = 'rotateY(0deg)';
+        el.style.zIndex = pageEls.length - i;
+      }
+    });
+    if (prevBtn) prevBtn.disabled = current <= 0;
+    if (nextBtn) nextBtn.disabled = current >= pageEls.length - 1;
+    if (dotsWrap){
+      $$('.dot', dotsWrap).forEach((d,i) => d.classList.toggle('active', i === current));
+    }
+  }
+
+  function goTo(i){
+    current = Math.max(0, Math.min(pageEls.length - 1, i));
+    render();
+  }
+  function next(){ if (current < pageEls.length - 1) goTo(current + 1); }
+  function prev(){ if (current > 0) goTo(current - 1); }
+
+  if (prevBtn) prevBtn.addEventListener('click', prev);
+  if (nextBtn) nextBtn.addEventListener('click', next);
+
+  if (dotsWrap){
+    dotsWrap.innerHTML = '';
+    pages.forEach((_, i) => {
+      const dot = document.createElement('span');
+      dot.className = 'dot';
+      dot.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(dot);
+    });
+  }
+
+  // arrastar no celular (swipe)
+  const wrap = $('.book-wrap');
+  let touchStartX = null;
+  if (wrap){
+    wrap.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive:true });
+    wrap.addEventListener('touchend', e => {
+      if (touchStartX === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (dx > 50) prev();
+      else if (dx < -50) next();
+      touchStartX = null;
+    }, { passive:true });
+  }
+
+  // setas do teclado — só funcionam com a seção visível na tela
+  const section = $('#revista');
+  if (section && 'IntersectionObserver' in window){
+    let visible = false;
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { visible = entry.isIntersecting; });
+    }, { threshold: 0.4 });
+    observer.observe(section);
+    window.addEventListener('keydown', e => {
+      if (!visible) return;
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
+    });
+  }
+
+  render();
 })();
 
 /* =========================================================
