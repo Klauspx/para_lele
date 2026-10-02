@@ -3,7 +3,7 @@
 ========================================================= */
 const CONFIG = {
   // Data e hora em que o relacionamento começou (usada no contador)
-  startDate: new Date('2024-01-01T00:00:00'), // TROQUE AQUI a data
+  startDate: new Date('2026-05-02T00:00:00'), // TROQUE AQUI a data
 
   heroTitle: 'Feliz 02 meses gata! ❤️',              // TROQUE AQUI
   heroSubtitle: 'Eu não sou bom em escrever texto mas espero que esse site represente meu amor por você.', // TROQUE AQUI
@@ -176,22 +176,19 @@ $$('.magnetic').forEach(btn => {
       ctx.ellipse(0,0,p.size,p.size/2,0,0,Math.PI*2);
       ctx.fill();
     } else if(p.type === 'butterfly'){
-      ctx.translate(p.x, p.y);
-      const flap = Math.sin(p.drift*4);
-    } else if(p.type === 'butterfly'){
-    const flap = Math.sin(p.drift * 5);
+      const flap = Math.sin(p.drift * 5);
 
-    ctx.translate(
-        p.x,
-        p.y + flap * 3
-    );
+      ctx.translate(
+          p.x,
+          p.y + flap * 3
+      );
 
-    ctx.rotate(flap * 0.2);
+      ctx.rotate(flap * 0.2);
 
-    ctx.font = `${p.size}px serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('🦋', 0, 0);
+      ctx.font = `${p.size}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🦋', 0, 0);
     } else if(p.type === 'balloon'){
       ctx.translate(p.x, p.y);
       ctx.font = `${p.size}px serif`;
@@ -462,8 +459,34 @@ function burstHearts(originEl){
 })();
 
 /* =========================================================
+   CONTADOR (dias, horas, minutos, segundos)
+========================================================= */
+(function counter(){
+  const els = { d:$('#cDays'), h:$('#cHours'), m:$('#cMinutes'), s:$('#cSeconds') };
+  if (!els.d || !els.h || !els.m || !els.s) return;
+  function update(){
+    const diff = Date.now() - CONFIG.startDate.getTime();
+    if(diff < 0) return;
+    const s = Math.floor(diff/1000);
+    els.d.textContent = Math.floor(s/86400);
+    els.h.textContent = String(Math.floor((s%86400)/3600)).padStart(2,'0');
+    els.m.textContent = String(Math.floor((s%3600)/60)).padStart(2,'0');
+    els.s.textContent = String(s%60).padStart(2,'0');
+  }
+  update();
+  setInterval(update, 1000);
+})();
+
+/* =========================================================
    SCROLL REVEALS (GSAP + ScrollTrigger)
 ========================================================= */
+gsap.utils.toArray('.counter-card').forEach((el,i) => {
+  gsap.from(el, {
+    scrollTrigger:{ trigger: el, start:'top 85%' },
+    y: 40, opacity:0, duration:.8, delay:i*0.08, ease:'power3.out'
+  });
+});
+
 gsap.utils.toArray('.envelope').forEach((el,i) => {
   gsap.from(el, {
     scrollTrigger:{ trigger: el, start:'top 92%' },
