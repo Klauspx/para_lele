@@ -422,6 +422,107 @@ section{
 .letter-close{ position:absolute; top:14px; right:20px; font-size:26px; color: var(--plum-soft); }
 
 /* =========================================================
+   REVISTA DE FOTOS (flipbook)
+========================================================= */
+.revista-hint{
+  margin-top:-34px; margin-bottom:50px;
+  color: var(--plum-soft); font-size:14px;
+}
+
+.book-wrap{
+  display:flex; align-items:center; justify-content:center;
+  gap: 22px;
+  perspective: 1800px;
+  max-width: 900px; margin: 0 auto;
+}
+
+.book{
+  position:relative;
+  width: min(340px, 72vw);
+  height: 440px;
+  transform-style: preserve-3d;
+}
+
+.book-page{
+  position:absolute; inset:0;
+  border-radius: 16px;
+  overflow:hidden;
+  box-shadow: 0 20px 50px rgba(150,100,140,.3);
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transition: transform .8s cubic-bezier(.45,.05,.35,1);
+  will-change: transform;
+}
+
+.page-face{
+  position:absolute; inset:0;
+  backface-visibility: hidden;
+  display:flex; flex-direction:column;
+}
+.page-face.front{ background:#fff; }
+.page-face.back{
+  background: linear-gradient(135deg, var(--blush), var(--lilac));
+  transform: rotateY(180deg);
+  display:flex; align-items:center; justify-content:center;
+}
+.page-face.back::after{
+  content:'❤';
+  font-size:40px;
+  color: rgba(255,255,255,.65);
+}
+
+.page-photo{
+  width:100%; height:78%;
+  object-fit:cover;
+}
+.page-caption{
+  flex:1;
+  display:flex; align-items:center; justify-content:center;
+  padding: 10px 14px;
+  font-family: var(--font-display); font-style:italic;
+  color: var(--plum); text-align:center; font-size:15px;
+}
+
+.page-placeholder{
+  width:100%; height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; padding: 24px; text-align:center;
+  background: repeating-linear-gradient(45deg, var(--cream-2), var(--cream-2) 10px, #fff 10px, #fff 20px);
+  border: 2px dashed var(--blush-2);
+  color: var(--plum-soft); font-size:14px;
+}
+.page-placeholder .icon{ font-size:30px; }
+
+.book-nav{
+  width:46px; height:46px; border-radius:50%; flex-shrink:0;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+  font-size:20px; color: var(--plum);
+  display:flex; align-items:center; justify-content:center;
+  transition: transform .3s var(--ease-soft), opacity .3s;
+}
+.book-nav:hover{ transform: scale(1.1); }
+.book-nav:disabled{ opacity:.35; cursor:default; transform:none; }
+
+.book-dots{
+  display:flex; justify-content:center; gap:8px; margin-top:28px;
+}
+.book-dots .dot{
+  width:8px; height:8px; border-radius:50%;
+  background: var(--blush-2);
+  cursor:pointer;
+  transition: background .3s, transform .3s;
+}
+.book-dots .dot.active{ background: var(--rose); transform:scale(1.3); }
+
+@media (max-width: 560px){
+  .book{ height: 380px; }
+  .book-nav{ width:38px; height:38px; font-size:17px; }
+}
+
+/* =========================================================
    CÉU ESTRELADO
 ========================================================= */
 .sky-section{ background: radial-gradient(ellipse at 50% 20%, #2a2140 0%, #1b1430 55%, #120c22 100%); color:#fff; border-radius: 48px; margin: 0 4vw; }
